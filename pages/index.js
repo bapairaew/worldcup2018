@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import Page from 'components/Page'
 import Text from 'components/Text'
-import Match from 'components/Match'
+import Bet from 'components/Bet'
 import moment from 'moment'
 import { processMatches } from 'lib/matches'
 import 'isomorphic-fetch'
@@ -35,9 +35,9 @@ export default class extends React.PureComponent {
       <Page page='index'>
         {d ? (
           <React.Fragment>
-            <Text dusha tag='h1' size={3}>{moment(matches[d][0].date).calendar()}</Text>
+            <Text dusha tag='h1' size={3}>{moment(matches[d][0].date).fromNow()}</Text>
             <Container>
-              {matches[d].map(m => <Match key={m.name} {...m} home_team={teams[m.home_team - 1]}  away_team={teams[m.away_team - 1]} />)}
+              {matches[d].map(m => <Bet key={m.name} {...m} home_team={teams[m.home_team - 1]}  away_team={teams[m.away_team - 1]} />)}
             </Container>
           </React.Fragment>
         ) : (

@@ -80,7 +80,7 @@ const Separator = styled.div`
 `
 
 export default ({ home_team, away_team, home_result, away_result }) => (
-  <Container past={home_result !== null}>
+  <Container>
     <FlagContainer left>
       {home_team.flag ? <Flag src={home_team.flag} alt={home_team.name} /> : <Placeholder />}
     </FlagContainer>

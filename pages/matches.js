@@ -33,7 +33,7 @@ export default class extends React.PureComponent {
         <Text dusha tag='h1' size={3}>{process.browser && 'Matches'}</Text>
         {Object.keys(matches).sort((a, b) => a.localeCompare(b)).map(d => (
           <React.Fragment key={d}>
-            <Text dusha tag='h2' size={1.5}>{moment(matches[d][0].date).calendar()}</Text>
+            <Text dusha tag='h2' size={1.5}>{moment(matches[d][0].date).fromNow()}</Text>
             <Container>
               {matches[d].map(m => <Match key={m.name} {...m} home_team={teams[m.home_team - 1]}  away_team={teams[m.away_team - 1]} />)}
             </Container>
