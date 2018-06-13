@@ -14,7 +14,7 @@ const Page = ({ page, children, user = {}, logout = x => x }) => (
   <Layout>
     <Layout.Sidebar>
       <Layout.Sidebar.Header>
-        <Avatar name={user.name} image={user.image_192} />
+        <Avatar name={user.name} image={user.image} />
       </Layout.Sidebar.Header>
       <Layout.Sidebar.List>
         <Link href='/rule'>
