@@ -45,4 +45,4 @@ const Text = withDynamicTag(styled.span`
   ${props => props.dusha ? 'font-family: Dusha;' : ''}
 `)
 
-export default ({ children, ...props }) => children ? <Text {...props}>{children}</Text> : <Placeholder {...props} />
+export default ({ children, ...props }) => (children !== undefined && children !== null) ? <Text {...props}>{children}</Text> : <Placeholder {...props} />

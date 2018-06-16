@@ -1,0 +1,11 @@
+type SignInSignPayload {
+  slackid: String!
+  slacktoken: String!
+  name: String!
+  image: String!
+  bets: [Json!]
+}
+
+extend type Mutation {
+  signInSignUp(slackcode: String!): SignInSignPayload
+}

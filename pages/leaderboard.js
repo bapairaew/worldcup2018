@@ -1,6 +1,7 @@
 import React from 'react'
 import Page from 'components/Page'
 import Text from 'components/Text'
+import withData from 'lib/with-data'
 
 const Leaderboard = ({ }) => (
   <Page page='leaderboard'>
@@ -9,4 +10,4 @@ const Leaderboard = ({ }) => (
   </Page>
 )
 
-export default Leaderboard
+export default withData(Leaderboard)

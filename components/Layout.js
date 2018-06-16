@@ -1,12 +1,18 @@
 import styled from 'styled-components'
 import { space, color, shadow } from 'styles'
 
+const breakpoint = 500
+
 const Layout = styled.div`
   display: grid;
   grid-template-columns: 250px auto;
   background: ${color.primary};
   min-height: 100vh;
   color: #fff;
+
+  @media (max-width: 500px) {
+    grid-template-columns: 0 auto;
+  }
 `
 
 Layout.Sidebar = styled.div`
@@ -15,6 +21,7 @@ Layout.Sidebar = styled.div`
   grid-template-rows: 300px auto 60px;
   box-shadow: 0 0 30px ${shadow.light} inset;
   height: 100vh;
+  overflow-x: hidden;
 `
 
 Layout.Sidebar.Header = styled.div`
@@ -72,6 +79,10 @@ Layout.Main = styled.div`
   height: 100vh;
   overflow: auto;
   box-sizing: border-box;
+
+  @media (max-width: 500px) {
+    padding: ${space.small};
+  }
 `
 
 export default Layout

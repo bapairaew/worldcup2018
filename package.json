@@ -19,6 +19,7 @@
     "isomorphic-fetch": "^2.2.1",
     "mobile-detect": "^1.4.2",
     "moment": "^2.22.2",
+    "moment-timezone": "^0.5.17",
     "next": "^6.0.3",
     "query-string": "^6.1.0",
     "react": "^16.4.0",

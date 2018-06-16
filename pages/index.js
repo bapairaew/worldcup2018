@@ -3,8 +3,10 @@ import styled from 'styled-components'
 import Page from 'components/Page'
 import Text from 'components/Text'
 import Bet from 'components/Bet'
-import moment from 'moment'
-import { processMatches } from 'lib/matches'
+import withData, { DataContext } from 'lib/with-data'
+import moment from 'moment-timezone'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 import 'isomorphic-fetch'
 
 const Container = styled.div`
@@ -12,34 +14,34 @@ const Container = styled.div`
   flex-wrap: wrap;
 `
 
-export default class extends React.PureComponent {
-  state = {
-    matches: {},
-    teams: {}
-  }
+const FORMAT = 'YYYYMMDD'
 
-  async componentDidMount () {
-    const { teams, groups, knockout } = await (await fetch('https://raw.githubusercontent.com/lsv/fifa-worldcup-2018/master/data.json')).json()
-    const matches = {}
-    const now = moment()
-    const filter = (m, teams) => teams[m.home_team] && moment(m.date).isAfter(now)
-    processMatches(groups, matches, teams, filter)
-    processMatches(knockout, matches, teams, filter)
-    this.setState({ teams, matches })
-  }
-
+class Index extends React.PureComponent {
   render () {
-    const { matches, teams } = this.state
-    const d = Object.keys(matches)[0]
+    const { data: { matches, teams }, bet } = this.props
+    const date = moment().tz('Europe/Moscow').format(FORMAT)
     return (
       <Page page='index'>
-        {d ? (
-          <React.Fragment>
-            <Text dusha tag='h1' size={3}>{moment(matches[d][0].date).fromNow()}</Text>
-            <Container>
-              {matches[d].map(m => <Bet key={m.name} {...m} home_team={teams[m.home_team - 1]}  away_team={teams[m.away_team - 1]} />)}
-            </Container>
-          </React.Fragment>
+        {matches[date] ? (
+          <DataContext.Consumer>
+            {({ user: { id: slackid, token: slacktoken, bets = [] } = {}, refetch }) => (
+              <Container>
+                {matches[date].map(m => (
+                  <Bet
+                    key={m.name}
+                    {...m}
+                    bet={bets.find(b => b.match === m.name)}
+                    home_team={teams[m.home_team - 1]}
+                    away_team={teams[m.away_team - 1]}
+                    onBet={async (props) => {
+                      const response = await bet({ slackid, slacktoken, match: m.name, team: props.team.id, amount: +props.value })
+                      await refetch()
+                      return response
+                    }} />
+                ))}
+              </Container>
+            )}
+          </DataContext.Consumer>
         ) : (
           <Text dusha tag='h1' size={3}>{process.browser && 'No Match'}</Text>
         )}
@@ -47,3 +49,30 @@ export default class extends React.PureComponent {
     )
   }
 }
+
+export default graphql(gql`
+  mutation bet (
+    $slackid: String!
+    $slacktoken: String!
+    $match: Int!
+    $team: Int!
+    $amount: Int!
+  ) {
+    bet(
+      slackid: $slackid
+      slacktoken: $slacktoken
+      match: $match
+      team: $team
+      amount: $amount
+    ) {
+      id
+      match
+      amount
+      team
+    }
+  }
+`, {
+  props: ({ mutate }) => ({
+    bet: ({ slackid, slacktoken, match, team, amount }) =>  mutate({ variables: { slackid, slacktoken, match, team, amount } })
+  })
+})(withData(Index))
