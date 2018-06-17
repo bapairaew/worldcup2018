@@ -34,3 +34,5 @@ export const font = {
   medium: 1,
   small: 0.8
 }
+
+export const breakpoint = 500

@@ -1,17 +1,24 @@
-import styled from 'styled-components'
-import { space, color, shadow } from 'styles'
+import styled, { injectGlobal } from 'styled-components'
+import { space, color, shadow, breakpoint } from 'styles'
 
-const breakpoint = 500
+injectGlobal`
+  body {
+    background: ${color.primary};
+  }
+`
+
+const sidebarSize = '250px'
+const headerSize = '70px'
 
 const Layout = styled.div`
   display: grid;
-  grid-template-columns: 250px auto;
-  background: ${color.primary};
+  grid-template-columns: ${sidebarSize} auto;
   min-height: 100vh;
   color: #fff;
 
-  @media (max-width: 500px) {
-    grid-template-columns: 0 auto;
+  @media (max-width: ${breakpoint}px) {
+    grid-template-columns: ${sidebarSize} 100%;
+    overflow: hidden;
   }
 `
 
@@ -79,15 +86,36 @@ Layout.Main = styled.div`
   height: 100vh;
   overflow: auto;
   box-sizing: border-box;
+  background: ${color.primary};
+  transition: transform 300ms ease-in-out;
 
-  @media (max-width: 500px) {
-    padding: ${space.small};
+  @media (max-width: ${breakpoint}px) {
+    padding: ${space.medium};
+    transform: ${props => props.menuOpened ? 'translate(0, 0)' : `translate(-${sidebarSize}, 0)`};
   }
 `
 
-Layout.Content = styled.div`
+Layout.Main.Header = styled.div`
+  position: fixed;
+  top: 0;
+  height: ${headerSize};
+  width: 100%;
+  display: none;
+
+  @media (max-width: ${breakpoint}px) {
+    margin-left: -${space.small};
+    display: grid;
+    align-items: center;
+  }
+`
+
+Layout.Main.Content = styled.div`
   max-width: 1280px;
   margin: 0 auto;
+
+  @media (max-width: ${breakpoint}px) {
+    padding-top: ${headerSize};
+  }
 `
 
 export default Layout

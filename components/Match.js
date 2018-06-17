@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Text from 'components/Text'
-import { color, space, shadow, font, radius } from 'styles'
+import { color, space, shadow, font, radius, breakpoint } from 'styles'
 
 const getColor = props => props.correct ? color.secondary : props.wrong ? color.red : props.draw ? shadow.dark : shadow.light
 
@@ -13,7 +13,7 @@ const Container = styled.div`
   margin: ${space.large} ${space.large} ${space.large} 0;
   border-radius: 35px;
   border: 3px solid ${props=> getColor(props)};
-  @media (max-width: 500px) {
+  @media (max-width: ${breakpoint}px) {
     margin: ${space.large} 0;
   }
 `
@@ -89,7 +89,7 @@ const Separator = styled.div`
 
 const Wrapper = styled.div`
   position: relative;
-  @media (max-width: 500px) {
+  @media (max-width: ${breakpoint}px) {
     margin: 0 auto;
   }
 `

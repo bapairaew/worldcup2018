@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 import Text from 'components/Text'
-import { color, space, shadow } from 'styles'
+import { color, space, shadow, breakpoint } from 'styles'
 import moment from 'moment'
 import CheckedIcon from 'react-icons/lib/go/check'
 import { toast } from 'react-toastify'
@@ -18,7 +18,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   margin: ${space.large} ${space.large} ${space.large} 0;
-  @media (max-width: 500px) {
+  @media (max-width: ${breakpoint}px) {
     margin: ${space.large} 0 ${space.large} 0;
   }
   position: relative;

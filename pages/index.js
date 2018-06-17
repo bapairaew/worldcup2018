@@ -7,11 +7,12 @@ import withData, { DataContext } from 'lib/with-data'
 import moment from 'moment-timezone'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
+import { breakpoint } from 'styles'
 
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
-  @media (max-width: 500px) {
+  @media (max-width: ${breakpoint}px) {
     justify-content: center;
   }
 `

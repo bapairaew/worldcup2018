@@ -5,6 +5,7 @@ import Text from 'components/Text'
 import Match from 'components/Match'
 import moment from 'moment-timezone'
 import withData, { DataContext } from 'lib/with-data'
+import { breakpoint } from 'styles'
 import 'isomorphic-fetch'
 
 const Container = styled.div`
@@ -13,7 +14,7 @@ const Container = styled.div`
 `
 
 const Header = styled(Text)`
-  @media (max-width: 500px) {
+  @media (max-width: ${breakpoint}px) {
     text-align: center;
   }
 `
