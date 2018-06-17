@@ -7,10 +7,13 @@ const formatter = new Intl.NumberFormat()
 const Container = styled.div`
   display: grid;
   grid-template-columns: 120px 100px auto 200px;
+  @media (max-width: 500px) {
+    grid-template-columns: 60px 60px auto 100px;
+  }
   grid-column-gap: ${space.small};
   align-items: center;
-  background: ${shadow.medium};
-  box-shadow: 0 0 3px ${shadow.dark};
+  background: ${shadow.light};
+  box-shadow: 0 3px 3px ${shadow.medium};
   padding: ${space.medium};
   margin: ${space.medium} 0;
 `
@@ -19,6 +22,9 @@ const Rank = styled.div`
   margin: 0 auto;
   font-size: 2em;
   font-weight: bold;
+  @media (max-width: 500px) {
+    font-size: 1em;
+  }
 `
 
 const Avatar = styled.img`
@@ -27,12 +33,20 @@ const Avatar = styled.img`
   border-radius: 50%;
   border: 10px solid ${shadow.light};
   margin: 0 auto;
+  @media (max-width: 500px) {
+    width: 50px;
+    height: 50px;
+    border: 5px solid ${shadow.light};
+  }
 `
 
 const Name = styled.div`
   font-size: 1.5em;
   margin: 0 ${space.medium};
   font-weight: bold;
+  @media (max-width: 500px) {
+    font-size: 1em;
+  }
 `
 
 const Balance = styled.div`
@@ -40,7 +54,10 @@ const Balance = styled.div`
   font-size: 1.5em;
   margin: 0 ${space.medium};
   font-weight: bold;
-  letter-spacing: 4px;
+  letter-spacing: 2px;
+  @media (max-width: 500px) {
+    font-size: 1em;
+  }
 `
 // https://stackoverflow.com/questions/13627308/add-st-nd-rd-and-th-ordinal-suffix-to-a-number
 const getGetOrdinal = (n) => ["st","nd","rd"][(( n + 90) %100 - 10) % 10 - 1] || "th"

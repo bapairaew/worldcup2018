@@ -13,6 +13,9 @@ const Container = styled.div`
   margin: ${space.large} ${space.large} ${space.large} 0;
   border-radius: 35px;
   border: 3px solid ${props=> getColor(props)};
+  @media (max-width: 500px) {
+    margin: ${space.large} 0;
+  }
 `
 
 const FlagContainer = styled.div`
@@ -86,6 +89,9 @@ const Separator = styled.div`
 
 const Wrapper = styled.div`
   position: relative;
+  @media (max-width: 500px) {
+    margin: 0 auto;
+  }
 `
 
 const Amount = styled.div`

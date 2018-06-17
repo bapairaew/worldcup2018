@@ -11,6 +11,9 @@ import gql from 'graphql-tag'
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
+  @media (max-width: 500px) {
+    justify-content: center;
+  }
 `
 
 const FORMAT = 'YYYYMMDD'

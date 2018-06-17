@@ -5,6 +5,7 @@ import { color, space, shadow } from 'styles'
 import moment from 'moment'
 import CheckedIcon from 'react-icons/lib/go/check'
 import { toast } from 'react-toastify'
+import ReactLoading from 'react-loading'
 
 const formatter = new Intl.NumberFormat()
 
@@ -174,7 +175,9 @@ class Better extends React.PureComponent {
     return (
       <BetContainer role='button' started={started}>
         {betting ? (
-          <BetContent />
+          <BetContent>
+            <ReactLoading type='bubbles' height={30} width={30} />
+          </BetContent>
         ) : (bet.id || started || submitting || submitted) ? (
           <BetContent bet={bet.team === team.id} finished={finished} correct={correct}>
             {bet.team === team.id && formatter.format(bet.amount)}

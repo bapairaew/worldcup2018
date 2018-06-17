@@ -1,6 +1,5 @@
 import Document, { Head, Main, NextScript } from 'next/document'
 import { injectGlobal, ServerStyleSheet } from 'styled-components'
-import MobileDetect from 'mobile-detect'
 
 const FONT_FAMILY = 'Open Sans'
 
@@ -26,15 +25,13 @@ injectGlobal`
 
 export default class MyDocument extends Document {
   static getInitialProps ({ renderPage, req }) {
-    const md = new MobileDetect(req.headers['user-agent'])
     const sheet = new ServerStyleSheet()
     const page = renderPage(App => props => sheet.collectStyles(<App {...props} />))
     const styleTags = sheet.getStyleElement()
-    return { ...page, styleTags, isMoblie: md.mobile() }
+    return { ...page, styleTags }
   }
 
   render () {
-    const { isMoblie } = this.props
     return (
       <html>
         <Head>
@@ -45,14 +42,10 @@ export default class MyDocument extends Document {
           {this.props.styleTags}
         </Head>
         <body>
-          {!isMoblie ? (
-            <React.Fragment>
-              <Main />
-              <NextScript />
-            </React.Fragment>
-          ) : (
-            <h1>Mobile version is coming soon (probably).</h1>
-          )}
+          <React.Fragment>
+            <Main />
+            <NextScript />
+          </React.Fragment>
         </body>
       </html>
     )

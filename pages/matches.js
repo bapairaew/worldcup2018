@@ -12,6 +12,12 @@ const Container = styled.div`
   flex-wrap: wrap;
 `
 
+const Header = styled(Text)`
+  @media (max-width: 500px) {
+    text-align: center;
+  }
+`
+
 const calendarFormat = {
   sameDay: '[Today]',
   nextDay: '[Tomorrow]',
@@ -30,7 +36,7 @@ class Matches extends React.PureComponent {
           {({ user: { id: slackid, token: slacktoken, bets = [] } = {} }) => (
             Object.keys(matches).map(d => (
               <React.Fragment key={d}>
-                <Text tag='h2' size={1.5}>{moment(matches[d][0].date).tz('Europe/Moscow').calendar(null, calendarFormat)}</Text>
+                <Header tag='h2' size={1.5}>{moment(matches[d][0].date).tz('Europe/Moscow').calendar(null, calendarFormat)}</Header>
                 <Container>
                   {matches[d].map(m => (
                     <Match
