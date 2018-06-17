@@ -68,7 +68,9 @@ const Page = ({ page, children }) => (
       </Layout.Sidebar.List>
     </Layout.Sidebar>
     <Layout.Main>
-      {children}
+      <Layout.Content>
+        {children}
+      </Layout.Content>
     </Layout.Main>
   </Layout>
 )

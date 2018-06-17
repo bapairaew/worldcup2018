@@ -26,12 +26,11 @@ class Matches extends React.PureComponent {
     const { matches, teams } = this.props.data
     return (
       <Page page='matches'>
-        <Text dusha tag='h1' size={3}>{process.browser && 'Matches'}</Text>
         <DataContext.Consumer>
           {({ user: { id: slackid, token: slacktoken, bets = [] } = {} }) => (
             Object.keys(matches).map(d => (
               <React.Fragment key={d}>
-                <Text dusha tag='h2' size={1.5}>{moment(matches[d][0].date).tz('Europe/Moscow').calendar(null, calendarFormat)}</Text>
+                <Text tag='h2' size={1.5}>{moment(matches[d][0].date).tz('Europe/Moscow').calendar(null, calendarFormat)}</Text>
                 <Container>
                   {matches[d].map(m => (
                     <Match

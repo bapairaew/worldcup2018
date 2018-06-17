@@ -7,7 +7,6 @@ import withData, { DataContext } from 'lib/with-data'
 import moment from 'moment-timezone'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
-import 'isomorphic-fetch'
 
 const Container = styled.div`
   display: flex;

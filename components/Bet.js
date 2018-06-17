@@ -4,6 +4,7 @@ import Text from 'components/Text'
 import { color, space, shadow } from 'styles'
 import moment from 'moment'
 import CheckedIcon from 'react-icons/lib/go/check'
+import { toast } from 'react-toastify'
 
 const formatter = new Intl.NumberFormat()
 
@@ -152,11 +153,17 @@ class Better extends React.PureComponent {
   }
 
   handleSubmit = async (e) => {
-    const { onBet = x => x, ...props } = this.props
-    e.preventDefault()
-    this.setState({ submitting: true })
-    await onBet({ ...props, value: this.state.value })
-    this.setState({ submitting: false, submitted: true })
+    try {
+      const { onBet = x => x, ...props } = this.props
+      e.preventDefault()
+      this.setState({ submitting: true })
+      const response = await onBet({ ...props, value: this.state.value })
+      this.setState({ submitted: true })
+    } catch (ex) {
+      toast.error(ex.message)
+    } finally {
+      this.setState({ submitting: false })
+    }
   }
 
   render () {
@@ -206,11 +213,16 @@ const Team = ({ team, result, finished, won }) => (
 class Bet extends React.PureComponent {
   state = { betting: false }
 
-  handleBet = (props) => {
-    this.setState({ betting: true }, async () => {
-      await this.props.onBet(props)
+  handleBet = async (props) => {
+    try {
+      this.setState({ betting: true })
+      const response = await this.props.onBet(props)
+      return response
+    } catch (ex) {
+      throw ex
+    } finally {
       this.setState({ betting: false })
-    })
+    }
   }
 
   render () {

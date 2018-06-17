@@ -1,13 +1,49 @@
 import React from 'react'
+import styled from 'styled-components'
 import Page from 'components/Page'
 import Text from 'components/Text'
-import withData from 'lib/with-data'
+import Player from 'components/Player'
+import withData, { getBalance } from 'lib/with-data'
+import gql from 'graphql-tag'
+import { Query } from 'react-apollo'
+import { space } from 'styles'
 
-const Leaderboard = ({ }) => (
-  <Page page='leaderboard'>
-    <Text dusha tag='h1' size={3}>Leaderboard</Text>
-    <Text>Coming soon</Text>
-  </Page>
+const allPlayers = gql`
+  query {
+    allPlayers {
+      id
+      name
+      image
+      bets {
+        id
+        match
+        team
+        amount
+      }
+    }
+  }
+`
+
+const Container = styled.div`
+  padding: ${space.medium} 0;
+`
+
+const Leaderboard = ({ data }) => (
+  <Query query={allPlayers}>
+    {({ data: { allPlayers = [] } = {}, ...props}) => {
+      const players = allPlayers.map(player => ({ ...player, balance: getBalance(data, player.bets) })).sort((a, b) => a.balance - b.balance)
+      return (
+        <Page page='leaderboard'>
+          <Text tag='h1' dusha size={3} weight='bold'>Leaderboard</Text>
+          <Container>
+            {players.map((player, index) => (
+              <Player key={player.id} {...player} rank={index + 1} />
+            ))}
+          </Container>
+        </Page>
+      )
+    }}
+  </Query>
 )
 
 export default withData(Leaderboard)

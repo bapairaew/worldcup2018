@@ -5,7 +5,7 @@ export const color = {
   gray: '#f1f1f1',
   green: '#2e933c',
   gold: '#d5a021',
-  red: '#ed1b07'
+  red: '#e74c3c'
 }
 
 export const radius = {

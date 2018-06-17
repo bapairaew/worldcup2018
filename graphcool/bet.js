@@ -48,7 +48,7 @@ module.exports = async (event) => {
     const matchData = findMatch(data, match)
     if (moment(matchData.date).isBefore(moment())) {
       return {
-        error: 'Expired'
+        error: 'The match is already started/finished'
       }
     }
 
@@ -97,7 +97,7 @@ module.exports = async (event) => {
       }
     } else {
       return {
-        error: 'Not enough'
+        error: 'Not enough coins to bet'
       }
     }
   } catch (ex) {
