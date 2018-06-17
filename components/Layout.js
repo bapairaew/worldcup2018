@@ -4,6 +4,7 @@ import { space, color, shadow, breakpoint } from 'styles'
 injectGlobal`
   body {
     background: ${color.primary};
+    -webkit-overflow-scrolling: touch;
   }
 `
 
