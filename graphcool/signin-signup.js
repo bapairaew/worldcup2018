@@ -2,7 +2,7 @@ const { fromEvent } = require('graphcool-lib')
 
 const SLACK_CLIENT_ID = '3033437246.378536499075'
 const SLACK_OAUTH_ENDPOINT = 'https://slack.com/api/oauth.access'
-const SLACK_CLIENT_SECRET = 'dda7784c61ca1e5cc886506be8df269b'
+const SLACK_CLIENT_SECRET = ''
 
 module.exports = async (event) => {
   try {
