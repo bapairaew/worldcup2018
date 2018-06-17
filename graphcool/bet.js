@@ -53,7 +53,7 @@ module.exports = async (event) => {
     }
 
     const initial = PER_DAY * moment().diff(START_DAY, 'days')
-    const balance = bets.reduce((remaining, bet) => {
+    const balance = Player.bets.reduce((remaining, bet) => {
       const m = findMatch(data, bet.match)
       if (m.home_result === null) {
         return remaining - bet.amount
