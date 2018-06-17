@@ -91,7 +91,7 @@ const Wrapper = styled.div`
 const Amount = styled.div`
   position: absolute;
   top: 14px;
-  left: 50%;
+  left: ${props => props.left ? '25%' : '75%'};
   width: 80px;
   margin-left: -58px;
   background: ${props=> getColor(props)};
@@ -103,12 +103,14 @@ const Amount = styled.div`
 `
 
 export default ({ bet = {}, date, finished, home_team, away_team, home_result, away_result }) => {
-  const correct = (bet.team === home_team.id && home_result > away_result) || (bet.team === away_team.id && home_result < away_result)
+  const betHome = bet.team === home_team.id
+  const betAway = bet.team === away_team.id
+  const correct = (betHome && home_result > away_result) || (betAway && home_result < away_result)
   const draw = bet.id && home_result !== null && home_result === away_result
   const wrong = bet.id && !draw && finished && !correct
   return (
     <Wrapper>
-      {bet.id && <Amount draw={draw} correct={correct} wrong={wrong}>{draw ? 'draw' : bet.amount}</Amount>}
+      {bet.id && <Amount left={betHome} draw={draw} correct={correct} wrong={wrong}>{draw ? 'draw' : bet.amount}</Amount>}
       <Container draw={draw} correct={correct} wrong={wrong}>
         <FlagContainer left>
           {home_team.flag ? <Flag src={home_team.flag} alt={home_team.name} /> : <Placeholder />}
