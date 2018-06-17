@@ -8,7 +8,7 @@ injectGlobal`
 `
 
 const sidebarSize = '250px'
-const headerSize = '70px'
+const headerSize = '60px'
 
 const Layout = styled.div`
   display: grid;
@@ -95,26 +95,32 @@ Layout.Main = styled.div`
   }
 `
 
-Layout.Main.Header = styled.div`
-  position: fixed;
-  top: 0;
-  height: ${headerSize};
-  width: 100%;
-  display: none;
-
-  @media (max-width: ${breakpoint}px) {
-    margin-left: -${space.small};
-    display: grid;
-    align-items: center;
-  }
-`
-
 Layout.Main.Content = styled.div`
   max-width: 1280px;
   margin: 0 auto;
 
   @media (max-width: ${breakpoint}px) {
     padding-top: ${headerSize};
+  }
+`
+
+Layout.Header = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: ${headerSize};
+  width: 100%;
+  display: none;
+  color: #fff;
+  padding: 0 ${space.medium};
+  background: ${color.primary};
+  transition: transform 300ms ease-in-out;
+
+  @media (max-width: ${breakpoint}px) {
+    margin-left: -${space.small};
+    display: grid;
+    align-items: center;
+    transform: ${props => !props.menuOpened ? 'translate(0, 0)' : `translate(${sidebarSize}, 0)`};
   }
 `
 

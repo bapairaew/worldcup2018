@@ -50,7 +50,7 @@ export default class Avatar extends React.PureComponent {
     const { name, image, balance } = this.props
     return (
       <Container>
-        <LogoImage alt='World Cup 2018' src='https://ucarecdn.com/827fb52e-39e6-44e3-af72-3131d139e6bb/-/crop/154x45/0,110/-/format/webp/' />
+        <LogoImage alt='World Cup 2018' src='https://ucarecdn.com/827fb52e-39e6-44e3-af72-3131d139e6bb/-/crop/154x45/0,110/-/format/png/' />
         {image ? <AvatarImage alt={name} src={image} /> : <AvatarImagePlaceholder />}
         <AvatarText tag='h1' size={font.medium}>{name}</AvatarText>
         <BalanceText size={font.small}><BalanceIcon />{formatter.format(balance)}</BalanceText>
