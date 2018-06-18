@@ -40,7 +40,7 @@ const Leaderboard = ({ data }) => (
         .map(player => ({
           ...player,
           // balance: getBalance(data, player.bets),
-          finishedBalance: getBalance({ data, bets: player.bets, ignoreRemaining: true })
+          finishedBalance: getBalance({ data, bets: player.bets, ignoreUnfinished: true })
         }))
         .slice(0)
         .sort((a, b) => b.finishedBalance - a.finishedBalance)

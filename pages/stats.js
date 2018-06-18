@@ -61,7 +61,7 @@ const Stats = ({ router, data }) => {
             balance: getBalance({
               data,
               bets: player.bets,
-              ignoreRemaining: true,
+              ignoreUnfinished: true,
               ignoreMatch: m => moment(m.date).isAfter(d),
               now: d
             })
