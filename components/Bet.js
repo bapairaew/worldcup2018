@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 import Text from 'components/Text'
-import { color, space, shadow, breakpoint, emptyImage } from 'styles'
+import { font, color, space, shadow, breakpoint, emptyImage } from 'styles'
 import moment from 'moment'
 import CheckedIcon from 'react-icons/lib/go/check'
 import { toast } from 'react-toastify'
@@ -98,6 +98,7 @@ const BetButton = styled.button`
   cursor: pointer;
   background: ${shadow.medium};
   box-shadow: 0 0 10px ${shadow.medium};
+  font-size: ${font.medium}em;
   pointer-events: ${props => props.started ? 'none' : 'auto'};
   ${commonBetElementStyle}
   transform: ${props => props.active ? 'rotateX(-90deg) translateZ(25px)' : 'rotateX(0deg) translateZ(25px)'};
@@ -125,7 +126,7 @@ const BetInput = styled.input`
   color: ${shadow.dark};
   text-align: center;
   font-weight: bold;
-  font-size: 1.1em;
+  font-size: ${font.medium}em;
   padding: 0 ${space.small};
   box-sizing: border-box;
   &:focus {

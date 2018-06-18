@@ -64,10 +64,10 @@ class Page extends React.PureComponent {
                   </Layout.Sidebar.List.Item>
                 </a>
               </Link>
-              <Link href='/charts'>
+              <Link href='/stats'>
                 <a>
-                  <Layout.Sidebar.List.Item active={page === 'charts'}>
-                    <ChartsIcon size={24} /> Charts
+                  <Layout.Sidebar.List.Item active={page === 'stats'}>
+                    <ChartsIcon size={24} /> Stats
                   </Layout.Sidebar.List.Item>
                 </a>
               </Link>

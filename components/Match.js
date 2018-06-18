@@ -111,7 +111,7 @@ const Amount = styled.div`
 export default ({ bet = {}, finished, home_team = {}, away_team = {}, home_result = null, away_result = null }) => {
   const betHome = bet.team === home_team.id
   const betAway = bet.team === away_team.id
-  const correct = (betHome && home_result > away_result) || (betAway && home_result < away_result)
+  const correct = finished && (betHome && home_result > away_result) || (betAway && home_result < away_result)
   const draw = bet.id && finished && home_result === away_result
   const wrong = bet.id && !draw && finished && !correct
   return (

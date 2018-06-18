@@ -5,7 +5,6 @@ import Text from 'components/Text'
 import Player from 'components/Player'
 import withData, { getBalance } from 'lib/with-data'
 import gql from 'graphql-tag'
-import ReactLoading from 'react-loading'
 import { Query } from 'react-apollo'
 import { space } from 'styles'
 
@@ -40,8 +39,8 @@ const Leaderboard = ({ data }) => (
       const players = allPlayers
         .map(player => ({
           ...player,
-          finishedBalance: getBalance(data, player.bets, true),
-          balance: getBalance(data, player.bets)
+          // balance: getBalance(data, player.bets),
+          finishedBalance: getBalance({ data, bets: player.bets, ignoreRemaining: true })
         }))
         .slice(0)
         .sort((a, b) => b.finishedBalance - a.finishedBalance)

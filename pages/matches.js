@@ -31,7 +31,6 @@ const calendarFormat = {
 class Matches extends React.PureComponent {
   render () {
     const { matches, teams } = this.props.data
-    console.log(matches)
     return (
       <Page page='matches'>
         {!matches ? (
