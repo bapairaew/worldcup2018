@@ -25,28 +25,36 @@ class Index extends React.PureComponent {
     const date = moment().tz('Europe/Moscow').format(FORMAT)
     return (
       <Page page='index'>
-        {matches[date] ? (
-          <DataContext.Consumer>
-            {({ user: { id: slackid, token: slacktoken, bets = [] } = {}, refetch }) => (
-              <Container>
-                {matches[date].map(m => (
-                  <Bet
-                    key={m.name}
-                    {...m}
-                    bet={bets.find(b => b.match === m.name)}
-                    home_team={teams[m.home_team - 1]}
-                    away_team={teams[m.away_team - 1]}
-                    onBet={async (props) => {
-                      const response = await bet({ slackid, slacktoken, match: m.name, team: props.team.id, amount: +props.value })
-                      await refetch()
-                      return response
-                    }} />
-                ))}
-              </Container>
-            )}
-          </DataContext.Consumer>
+        {matches ? (
+          matches[date] ? (
+            <DataContext.Consumer>
+              {({ user: { id: slackid, token: slacktoken, bets = [] } = {}, refetch }) => (
+                <Container>
+                  {matches[date].map(m => (
+                    <Bet
+                      key={m.name}
+                      {...m}
+                      bet={bets.find(b => b.match === m.name)}
+                      home_team={teams[m.home_team - 1]}
+                      away_team={teams[m.away_team - 1]}
+                      onBet={async (props) => {
+                        const response = await bet({ slackid, slacktoken, match: m.name, team: props.team.id, amount: +props.value })
+                        await refetch()
+                        return response
+                      }} />
+                  ))}
+                </Container>
+              )}
+            </DataContext.Consumer>
+          ) : (
+            <Text dusha tag='h1' size={3}>{process.browser && 'No Match'}</Text>
+          )
         ) : (
-          <Text dusha tag='h1' size={3}>{process.browser && 'No Match'}</Text>
+          <Container>
+            {[0, 1, 2].map(m => (
+              <Bet key={m} />
+            ))}
+          </Container>
         )}
       </Page>
     )

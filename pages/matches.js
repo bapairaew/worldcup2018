@@ -31,27 +31,39 @@ const calendarFormat = {
 class Matches extends React.PureComponent {
   render () {
     const { matches, teams } = this.props.data
+    console.log(matches)
     return (
       <Page page='matches'>
-        <DataContext.Consumer>
-          {({ user: { id: slackid, token: slacktoken, bets = [] } = {} }) => (
-            Object.keys(matches || {}).map(d => (
-              <React.Fragment key={d}>
-                <Header tag='h2' size={1.5}>{moment(matches[d][0].date).tz('Europe/Moscow').calendar(null, calendarFormat)}</Header>
-                <Container>
-                  {matches[d].map(m => (
-                    <Match
-                      key={m.name}
-                      {...m}
-                      bet={bets.find(b => b.match === m.name)}
-                      home_team={teams[m.home_team - 1]}
-                      away_team={teams[m.away_team - 1]} /> 
-                  ))}
-                </Container>
-              </React.Fragment>
-            ))
-          )}
-        </DataContext.Consumer>
+        {!matches ? (
+          <React.Fragment>
+            <Header tag='h2' size={1.5}>Today</Header>
+            <Container>
+              {[0, 1, 2, 3].map(m => (
+                <Match key={m} /> 
+              ))}
+            </Container>
+          </React.Fragment>
+        ) : (
+          <DataContext.Consumer>
+            {({ user: { id: slackid, token: slacktoken, bets = [] } = {} }) => (
+              Object.keys(matches || {}).map(d => (
+                <React.Fragment key={d}>
+                  <Header tag='h2' size={1.5}>{moment(matches[d][0].date).tz('Europe/Moscow').calendar(null, calendarFormat)}</Header>
+                  <Container>
+                    {matches[d].map(m => (
+                      <Match
+                        key={m.name}
+                        {...m}
+                        bet={bets.find(b => b.match === m.name)}
+                        home_team={teams[m.home_team - 1]}
+                        away_team={teams[m.away_team - 1]} /> 
+                    ))}
+                  </Container>
+                </React.Fragment>
+              ))
+            )}
+          </DataContext.Consumer>
+        )}
       </Page>
     )
   }

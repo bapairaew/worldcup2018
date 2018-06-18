@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 import Text from 'components/Text'
-import { color, space, shadow, breakpoint } from 'styles'
+import { color, space, shadow, breakpoint, emptyImage } from 'styles'
 import moment from 'moment'
 import CheckedIcon from 'react-icons/lib/go/check'
 import { toast } from 'react-toastify'
@@ -168,7 +168,7 @@ class Better extends React.PureComponent {
   }
 
   render () {
-    const { betting, started, finished, won, team, bet = {} } = this.props
+    const { betting, started, finished, won, team = {}, bet = {} } = this.props
     const { clicked, value, submitting, submitted } = this.state
     const active = value !== '' || clicked
     const correct = finished && bet.team === team.id && won
@@ -180,7 +180,7 @@ class Better extends React.PureComponent {
           </BetContent>
         ) : (bet.id || started || submitting || submitted) ? (
           <BetContent bet={bet.team === team.id} finished={finished} correct={correct}>
-            {bet.team === team.id && formatter.format(bet.amount)}
+            {bet.team === team.id && bet.amount && formatter.format(bet.amount)}
           </BetContent>
         ) : (
           <React.Fragment>
@@ -206,10 +206,10 @@ class Better extends React.PureComponent {
   }
 }
 
-const Team = ({ team, result, finished, won }) => (
+const Team = ({ team = {}, result, finished, won }) => (
   <TeamContainer lost={finished && !won}>
-    <Flag src={team.flag} alt={team.name} won={finished && won} />
-    <Text tag='h2' size={2}>{result !== null ? result : team.fifaCode}</Text>
+    <Flag src={team.flag || emptyImage} alt={team.name} won={finished && won} />
+    <Text dusha={result === null} tag='h2' size={2}>{result !== null ? result : team.fifaCode}</Text>
   </TeamContainer>
 )
 
@@ -229,7 +229,7 @@ class Bet extends React.PureComponent {
   }
 
   render () {
-    const { bet = {}, date: _date, finished, name, home_team, away_team, home_result, away_result, onBet } = this.props
+    const { bet = {}, date: _date = '2016-01-01', finished = true, name, home_team, away_team, home_result, away_result, onBet } = this.props
     const { betting } = this.state
     const date = moment(_date)
     const now = moment()

@@ -42,7 +42,7 @@ const Flag = styled.img`
 `
 
 const Placeholder = Flag.withComponent('div').extend`
-  background: ${shadow.light};
+  background: ${color.primary};
 `
 
 const SubContainer = styled.div`
@@ -108,7 +108,7 @@ const Amount = styled.div`
   border-radius: ${radius.medium} ${radius.medium} 0 0;
 `
 
-export default ({ bet = {}, date, finished, home_team, away_team, home_result, away_result }) => {
+export default ({ bet = {}, finished, home_team = {}, away_team = {}, home_result = null, away_result = null }) => {
   const betHome = bet.team === home_team.id
   const betAway = bet.team === away_team.id
   const correct = (betHome && home_result > away_result) || (betAway && home_result < away_result)
@@ -122,7 +122,7 @@ export default ({ bet = {}, date, finished, home_team, away_team, home_result, a
           {home_team.flag ? <Flag src={home_team.flag} alt={home_team.name} /> : <Placeholder />}
         </FlagContainer>
         <SubContainer>
-          <StyledText>{home_team.fifaCode}</StyledText>
+          <StyledText dusha>{home_team.fifaCode}</StyledText>
         </SubContainer>
         <SubContainer>
           <StyledText score>{home_result === null ? ' ' : home_result}</StyledText>
@@ -132,7 +132,7 @@ export default ({ bet = {}, date, finished, home_team, away_team, home_result, a
           <StyledText score>{away_result === null ? ' ' : away_result}</StyledText>
         </SubContainer>
         <SubContainer>
-          <StyledText>{away_team.fifaCode}</StyledText>
+          <StyledText dusha>{away_team.fifaCode}</StyledText>
         </SubContainer>
         <FlagContainer>
           {away_team.flag ? <Flag src={away_team.flag} alt={away_team.name} /> : <Placeholder />}

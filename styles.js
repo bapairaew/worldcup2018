@@ -36,3 +36,5 @@ export const font = {
 }
 
 export const breakpoint = 500
+
+export const emptyImage = 'https://ucarecdn.com/a9b269d8-664a-4af9-bee5-086874bf7c0d/-/preview/1x1/-/format/png/'

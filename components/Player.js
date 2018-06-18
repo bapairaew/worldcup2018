@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { font, shadow, space, breakpoint } from 'styles'
+import { font, shadow, space, breakpoint, emptyImage } from 'styles'
 
 const formatter = new Intl.NumberFormat()
 
@@ -16,6 +16,7 @@ const Container = styled.div`
   box-shadow: 0 3px 3px ${shadow.medium};
   padding: ${space.medium};
   margin: ${space.medium} 0;
+  width: 100%;
 `
 
 const Rank = styled.div`
@@ -86,13 +87,13 @@ const Ordinal = styled.span`
 // https://stackoverflow.com/questions/13627308/add-st-nd-rd-and-th-ordinal-suffix-to-a-number
 const getGetOrdinal = (n) => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th'
 
-export default ({ rank, image, name, balance, finishedBalance }) => (
+export default ({ rank, image, name, finishedBalance }) => (
   <Container>
     <Rank>
       <span>{rank}</span>
       <Ordinal>{getGetOrdinal(rank)}</Ordinal>
     </Rank>
-    <Avatar src={image} alt={name} />
+    <Avatar src={image || emptyImage} alt={name} />
     <Name>{name}</Name>
     <BalanceContainer>
       <FinishedBalance>{formatter.format(finishedBalance)}</FinishedBalance>

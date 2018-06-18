@@ -5,6 +5,7 @@ import Text from 'components/Text'
 import Player from 'components/Player'
 import withData, { getBalance } from 'lib/with-data'
 import gql from 'graphql-tag'
+import ReactLoading from 'react-loading'
 import { Query } from 'react-apollo'
 import { space } from 'styles'
 
@@ -26,6 +27,11 @@ const allPlayers = gql`
 
 const Container = styled.div`
   padding: ${space.medium} 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 40vh;
 `
 
 const Leaderboard = ({ data }) => (
@@ -43,7 +49,11 @@ const Leaderboard = ({ data }) => (
         <Page page='leaderboard'>
           <Text tag='h1' dusha size={3} weight='bold'>Leaderboard</Text>
           <Container>
-            {players.map((player, index) => (
+            {!data.matches ? (
+              [0, 1, 2, 3].map((index) => (
+                <Player key={index} finishedBalance={0} rank={index + 1} />
+              ))
+            ) : players.map((player, index) => (
               <Player key={player.id} {...player} rank={index + 1} />
             ))}
           </Container>
