@@ -35,7 +35,7 @@ class Matches extends React.PureComponent {
       <Page page='matches'>
         <DataContext.Consumer>
           {({ user: { id: slackid, token: slacktoken, bets = [] } = {} }) => (
-            Object.keys(matches).map(d => (
+            Object.keys(matches || {}).map(d => (
               <React.Fragment key={d}>
                 <Header tag='h2' size={1.5}>{moment(matches[d][0].date).tz('Europe/Moscow').calendar(null, calendarFormat)}</Header>
                 <Container>

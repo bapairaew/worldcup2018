@@ -21,7 +21,7 @@ const FORMAT = 'YYYYMMDD'
 
 class Index extends React.PureComponent {
   render () {
-    const { data: { matches, teams }, bet } = this.props
+    const { data: { matches = [], teams = [] }, bet } = this.props
     const date = moment().tz('Europe/Moscow').format(FORMAT)
     return (
       <Page page='index'>

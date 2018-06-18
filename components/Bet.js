@@ -29,7 +29,7 @@ const Container = styled.div`
     top: 50%;
     width: 60px;
     height: 60px;
-    margin-left: -30px;
+    margin-left: -32px;
     margin-top: -50px;
     border: 2px solid ${color.primary};
     border-radius: 50%;

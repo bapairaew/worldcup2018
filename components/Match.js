@@ -112,7 +112,7 @@ export default ({ bet = {}, date, finished, home_team, away_team, home_result, a
   const betHome = bet.team === home_team.id
   const betAway = bet.team === away_team.id
   const correct = (betHome && home_result > away_result) || (betAway && home_result < away_result)
-  const draw = bet.id && home_result !== null && home_result === away_result
+  const draw = bet.id && finished && home_result === away_result
   const wrong = bet.id && !draw && finished && !correct
   return (
     <Wrapper>

@@ -31,7 +31,14 @@ const Container = styled.div`
 const Leaderboard = ({ data }) => (
   <Query query={allPlayers}>
     {({ data: { allPlayers = [] } = {}, ...props}) => {
-      const players = allPlayers.map(player => ({ ...player, balance: getBalance(data, player.bets) })).sort((a, b) => b.balance - a.balance)
+      const players = allPlayers
+        .map(player => ({
+          ...player,
+          finishedBalance: getBalance(data, player.bets, true),
+          balance: getBalance(data, player.bets)
+        }))
+        .slice(0)
+        .sort((a, b) => b.finishedBalance - a.finishedBalance)
       return (
         <Page page='leaderboard'>
           <Text tag='h1' dusha size={3} weight='bold'>Leaderboard</Text>

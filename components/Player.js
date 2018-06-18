@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { shadow, space, breakpoint } from 'styles'
+import { font, shadow, space, breakpoint } from 'styles'
 
 const formatter = new Intl.NumberFormat()
 
@@ -20,11 +20,11 @@ const Container = styled.div`
 
 const Rank = styled.div`
   margin: 0 auto;
-  font-size: 2em;
+  font-size: ${font.xxlarge}em;
   font-weight: bold;
   text-align: center;
   @media (max-width: ${breakpoint}px) {
-    font-size: 1em;
+    font-size: ${font.medium}em;
   }
 `
 
@@ -51,16 +51,28 @@ const Name = styled.div`
   }
 `
 
-const Balance = styled.div`
+const BalanceContainer = styled.div`
   text-align: right;
-  font-size: 1.5em;
   margin: 0 ${space.medium};
+  @media (max-width: ${breakpoint}px) {
+    margin: 0 ${space.small};
+  }
+`
+
+const FinishedBalance = styled.div`
+  font-size: ${font.xlarge}em;
   font-weight: bold;
   letter-spacing: 4px;
   @media (max-width: ${breakpoint}px) {
-    font-size: 1em;
+    font-size: ${font.medium}em;
     letter-spacing: 0;
-    margin: 0 ${space.small};
+  }
+`
+
+const Balance = styled.div`
+  font-size: ${font.medium}em;
+  @media (max-width: ${breakpoint}px) {
+    font-size: ${font.small}em;
   }
 `
 
@@ -72,9 +84,9 @@ const Ordinal = styled.span`
 `
 
 // https://stackoverflow.com/questions/13627308/add-st-nd-rd-and-th-ordinal-suffix-to-a-number
-const getGetOrdinal = (n) => ["st","nd","rd"][(( n + 90) %100 - 10) % 10 - 1] || "th"
+const getGetOrdinal = (n) => ['st', 'nd', 'rd'][((n + 90) % 100 - 10) % 10 - 1] || 'th'
 
-export default ({ rank, image, name, balance }) => (
+export default ({ rank, image, name, balance, finishedBalance }) => (
   <Container>
     <Rank>
       <span>{rank}</span>
@@ -82,6 +94,9 @@ export default ({ rank, image, name, balance }) => (
     </Rank>
     <Avatar src={image} alt={name} />
     <Name>{name}</Name>
-    <Balance>{formatter.format(balance)}</Balance>
+    <BalanceContainer>
+      <FinishedBalance>{formatter.format(finishedBalance)}</FinishedBalance>
+      {/* <Balance>{formatter.format(balance)}</Balance> */}
+    </BalanceContainer>
   </Container>
 )

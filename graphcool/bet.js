@@ -6,7 +6,7 @@ const START_DAY = moment('2018-06-13T00:00:00+08:00')
 
 const findMatchFromGroup = (groups, _match) => {
   let match = null
-  Object.keys(groups).find(g => {
+  Object.keys(groups || {}).find(g => {
     const m = groups[g].matches.find(m => m.name === _match)
     if (m) match = m
     return m
@@ -55,7 +55,9 @@ module.exports = async (event) => {
     const initial = PER_DAY * moment().diff(START_DAY, 'days')
     const balance = Player.bets.reduce((remaining, bet) => {
       const m = findMatch(data, bet.match)
-      if (!m.finished) {
+      if (!m) {
+        return remaining
+      } else if (!m.finished) {
         return remaining - bet.amount
       } else if (m.home_result === m.away_result) {
         return remaining
