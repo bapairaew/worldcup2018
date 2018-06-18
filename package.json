@@ -24,6 +24,7 @@
     "react": "^16.4.0",
     "react-apollo": "^2.1.4",
     "react-dom": "^16.4.0",
+    "react-ga": "^2.5.3",
     "react-icons": "^2.2.7",
     "react-loading": "^2.0.2",
     "react-toastify": "^4.1.0",

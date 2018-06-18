@@ -10,9 +10,15 @@ import MenuIcon from 'react-icons/lib/md/menu'
 import Avatar from 'components/Avatar'
 import Link from 'next/link'
 import { DataContext } from 'lib/with-data'
+import ReactGA from 'react-ga'
 
 class Page extends React.PureComponent {
   state = { menuOpened: false }
+
+  componentDidMount () {
+    ReactGA.initialize('UA-120986356-1')
+    ReactGA.pageview(window.location.pathname + window.location.search)
+  }
 
   render () {
     const { page, children } = this.props
