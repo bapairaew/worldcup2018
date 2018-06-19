@@ -52,20 +52,38 @@ module.exports = async (event) => {
       }
     }
 
+    const { allOdds } = await api.request(`
+      query {
+        allOdds {
+          id
+          away
+          home
+          draw
+          match
+        }
+      }
+    `)
+    
+    const defaultOdd = { home: 2, draw: 2, away: 2 }
+    const getOdd = (m, allOdds) => (m && allOdds.find(o => o.match === m.name)) || defaultOdd
+
     const initial = PER_DAY * moment().diff(START_DAY, 'days')
     const balance = Player.bets.reduce((remaining, bet) => {
       const m = findMatch(data, bet.match)
-      if (!m) {
-        return remaining
-      } else if (!m.finished) {
-        return remaining - bet.amount
-      } else if (m.home_result === m.away_result) {
-        return remaining
-      } else if (m.home_result > m.away_result) {
-        return m.home_team === bet.team ? remaining + bet.amount : remaining - bet.amount
-      } else if (m.home_result < m.away_result) {
-        return m.away_team === bet.team ? remaining + bet.amount : remaining - bet.amount
+      const odd = getOdd(m, allOdds)
+
+      if (m) {
+        if (!m.finished) {
+          return remaining - bet.amount
+        } else if (m.winner === m.home_team || m.home_result > m.away_result) {
+          return remaining + ((m.home_team === bet.team ? odd.home - 1 : -1) * bet.amount)
+        } else if (m.winner === m.away_team || m.home_result < m.away_result) {
+          return remaining + ((m.away_team === bet.team ? odd.away - 1 : -1) * bet.amount)
+        } else if (m.home_result === m.away_result) {
+          return remaining + ((-1 === bet.team ? odd.draw - 1 : -1) * bet.amount)
+        }
       }
+
       return remaining
     }, initial)
 

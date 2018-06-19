@@ -11,9 +11,9 @@ const formatter = new Intl.NumberFormat()
 
 const Container = styled.div`
   display: grid;
-  grid-template-columns: 175px 175px;
+  grid-template-columns: 55px 55px 55px 55px 55px 55px;
   grid-column-gap: 3px;
-  grid-template-rows: 40px 250px 40px;
+  grid-template-rows: 40px 250px 20px 40px;
   grid-row-gap: 3px;
   align-items: center;
   justify-content: center;
@@ -46,7 +46,7 @@ const Flag = styled.img`
 `
 
 const Time = styled.div`
-  grid-column-end: span 2;
+  grid-column-end: span 6;
   height: 100%;
   background: ${props => props.finished ? shadow.light : props.started ? color.green : shadow.medium};
   color: ${props => props.finished ? color.primary : '#fff'};
@@ -56,6 +56,7 @@ const Time = styled.div`
 `
 
 const TeamContainer = styled.div`
+  grid-column-end: span 3;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -68,21 +69,31 @@ const TeamContainer = styled.div`
   }
 `
 
-const BetContainer = styled.div`
-  width: 175px;
-  height: 40px;
-  position: relative;
+const Odd = styled.div`
+  grid-column-end: span 2;
+  background: ${shadow.light};
+  font-size: ${font.small}em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  > * {
+    opacity: 0.2;
+  }
 `
 
-const betElementSize = css`
+const BetContainer = styled.div`
+  grid-column-end: span 2;
+  width: 100%;
+  height: 100%;
+  position: relative;
 `
 
 const commonBetElementStyle = css`
   position: absolute;
   left: 0;
   top: 0;
-  width: 175px;
-  height: 40px;
+  width: 100%;
+  height: 100%;
   transform-style: flat;
   transition: transform 300ms ease-out;
 `
@@ -108,7 +119,7 @@ const BetForm = styled.form`
   ${commonBetElementStyle}
   transform: ${props => props.active ? 'rotateX(0deg) translateZ(25px)' : 'rotateX(90deg) translateZ(25px)'};
   display: grid;
-  grid-template-columns: 135px 40px;
+  grid-template-columns: 80px 33px;
 `
 
 const BetSubmit = styled.button`
@@ -230,7 +241,7 @@ class Bet extends React.PureComponent {
   }
 
   render () {
-    const { bet = {}, date: _date = '2016-01-01', finished = true, name, home_team, away_team, home_result, away_result, onBet } = this.props
+    const { bet = {}, odd = {}, date: _date = '2016-01-01', finished = true, name, home_team, away_team, home_result, away_result, onBet } = this.props
     const { betting } = this.state
     const date = moment(_date)
     const now = moment()
@@ -241,7 +252,11 @@ class Bet extends React.PureComponent {
         <Time started={started} finished={finished}>{finished ? 'Finished' : started ? 'Live' : date.fromNow()}</Time>
         <Team finished={finished} team={home_team} result={home_result} won={home_result > away_result} />
         <Team finished={finished} team={away_team} result={away_result} won={away_result > home_result} />
+        <Odd><span>{odd.home}x</span></Odd>
+        <Odd><span>{odd.draw}x</span></Odd>
+        <Odd><span>{odd.away}x</span></Odd>
         <Better betting={betting} bet={bet} started={started} finished={finished} team={home_team} onBet={this.handleBet} won={home_result > away_result} />
+        <Better betting={betting} bet={bet} started={started} finished={finished} team={{ id: -1 }} onBet={this.handleBet} won={home_result === away_result} />
         <Better betting={betting} bet={bet} started={started} finished={finished} team={away_team} onBet={this.handleBet} won={away_result > home_result} />
       </Container>
     )

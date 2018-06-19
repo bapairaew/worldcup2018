@@ -2,8 +2,9 @@ import React from 'react'
 import styled from 'styled-components'
 import Text from 'components/Text'
 import { color, space, shadow, font, radius, breakpoint } from 'styles'
+import { correctBet } from 'lib/god'
 
-const getColor = props => props.correct ? color.secondary : props.wrong ? color.red : props.draw ? shadow.dark : shadow.light
+const getColor = props => props.correct ? color.secondary : props.wrong ? color.red : shadow.light
 
 const Container = styled.div`
   display: grid;
@@ -97,7 +98,7 @@ const Wrapper = styled.div`
 const Amount = styled.div`
   position: absolute;
   top: 14px;
-  left: ${props => props.left ? '25%' : '75%'};
+  left: ${props => props.position === 'left' ? '25%' : props.position === 'right' ? '75%' : '50%'};
   width: 80px;
   margin-left: -58px;
   background: ${props=> getColor(props)};
@@ -108,16 +109,15 @@ const Amount = styled.div`
   border-radius: ${radius.medium} ${radius.medium} 0 0;
 `
 
-export default ({ bet = {}, finished, home_team = {}, away_team = {}, home_result = null, away_result = null }) => {
-  const betHome = bet.team === home_team.id
-  const betAway = bet.team === away_team.id
-  const correct = finished && (betHome && home_result > away_result) || (betAway && home_result < away_result)
-  const draw = bet.id && finished && home_result === away_result
-  const wrong = bet.id && !draw && finished && !correct
+export default ({ bet = {}, finished, home_team = {}, away_team = {}, home_result = null, away_result = null, winner = null }) => {
+  const match = { home_team, away_team, home_result, away_result, winner }
+  const correct = finished && correctBet(bet, match)
+  const wrong = bet.id && finished && !correct
+  const position = bet.team === home_team.id ? 'left' : bet.team === away_team.id ? 'right' : 'middle'
   return (
     <Wrapper>
-      {bet.id && <Amount left={betHome} draw={draw} correct={correct} wrong={wrong}>{draw ? 'draw' : bet.amount}</Amount>}
-      <Container draw={draw} correct={correct} wrong={wrong}>
+      {bet.id && <Amount position={position} correct={correct} wrong={wrong}>{bet.amount}</Amount>}
+      <Container correct={correct} wrong={wrong}>
         <FlagContainer left>
           {home_team.flag ? <Flag src={home_team.flag} alt={home_team.name} /> : <Placeholder />}
         </FlagContainer>

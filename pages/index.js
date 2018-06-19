@@ -7,6 +7,7 @@ import withData, { DataContext } from 'lib/with-data'
 import moment from 'moment-timezone'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
+import { getOdd } from 'lib/god'
 import { breakpoint } from 'styles'
 
 const Container = styled.div`
@@ -21,7 +22,7 @@ const FORMAT = 'YYYYMMDD'
 
 class Index extends React.PureComponent {
   render () {
-    const { data: { matches = [], teams = [] }, bet } = this.props
+    const { data: { matches = [], teams = [] }, bet, allOdds = [] } = this.props
     const date = moment().tz('Europe/Moscow').format(FORMAT)
     return (
       <Page page='index'>
@@ -37,6 +38,7 @@ class Index extends React.PureComponent {
                       bet={bets.find(b => b.match === m.name)}
                       home_team={teams[m.home_team - 1]}
                       away_team={teams[m.away_team - 1]}
+                      odd={getOdd(m, allOdds)}
                       onBet={async (props) => {
                         const response = await bet({ slackid, slacktoken, match: m.name, team: props.team.id, amount: +props.value })
                         await refetch()
@@ -84,6 +86,6 @@ export default graphql(gql`
   }
 `, {
   props: ({ mutate }) => ({
-    bet: ({ slackid, slacktoken, match, team, amount }) =>  mutate({ variables: { slackid, slacktoken, match, team, amount } })
+    bet: ({ slackid, slacktoken, match, team, amount }) => mutate({ variables: { slackid, slacktoken, match, team, amount } })
   })
 })(withData(Index))

@@ -77,11 +77,16 @@ const Stats = ({ router, data }) => {
         const options = {
           bezierCurve: false
         }
+
+        const off = router.query.lol === undefined
+
+        !off && console.log(series)
+
         return (
           <Page page='stats'>
             <Text tag='h1' dusha size={3} weight='bold'>Stats</Text>
             <Container>
-              {router.query.lol === undefined ? (
+              {off ? (
                 <React.Fragment>
                   <Soon>🤔</Soon>
                   <Soon>🤔</Soon>
