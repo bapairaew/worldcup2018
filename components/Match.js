@@ -4,6 +4,7 @@ import Text from 'components/Text'
 import { color, space, shadow, font, radius, breakpoint } from 'styles'
 import { correctBet } from 'lib/god'
 
+const formatter = new Intl.NumberFormat()
 const getColor = props => props.correct ? color.secondary : props.wrong ? color.red : shadow.light
 
 const Container = styled.div`
@@ -98,9 +99,23 @@ const Wrapper = styled.div`
 const Amount = styled.div`
   position: absolute;
   top: 14px;
-  left: ${props => props.position === 'left' ? '25%' : props.position === 'right' ? '75%' : '50%'};
-  width: 80px;
-  margin-left: -58px;
+  ${props => props.position === 'left' ? `
+    left: 0;
+    margin-left: 30px;
+  ` : props.position === 'right' ? `
+    right: 0;
+    margin-right: 65px;
+    @media (max-width: ${breakpoint}px) {
+      margin-right: 30px;
+    }
+  ` : `
+    left: 50%;
+    margin-left: -65px;
+    @media (max-width: ${breakpoint}px) {
+      margin-left: -50px;
+    }
+  `};
+  width: 100px;
   background: ${props=> getColor(props)};
   display: grid;
   align-items: center;
@@ -116,7 +131,7 @@ export default ({ bet = {}, finished, home_team = {}, away_team = {}, home_resul
   const position = bet.team === home_team.id ? 'left' : bet.team === away_team.id ? 'right' : 'middle'
   return (
     <Wrapper>
-      {bet.id && <Amount position={position} correct={correct} wrong={wrong}>{bet.amount}</Amount>}
+      {bet.id && <Amount position={position} correct={correct} wrong={wrong}>{formatter.format(bet.amount)}</Amount>}
       <Container correct={correct} wrong={wrong}>
         <FlagContainer left>
           {home_team.flag ? <Flag src={home_team.flag} alt={home_team.name} /> : <Placeholder />}
