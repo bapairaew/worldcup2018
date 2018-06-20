@@ -121,7 +121,7 @@ Layout.Header = styled.div`
     margin-left: -${space.small};
     display: grid;
     align-items: center;
-    transform: ${props => !props.menuOpened ? 'translate(0, 0)' : `translate(${sidebarSize}, 0)`};
+    transform: ${props => !props.menuOpened ? 'translate(0, 0)' : `translate(calc(${sidebarSize} + 8px), 0)`};
   }
 `
 

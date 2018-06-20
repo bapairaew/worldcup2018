@@ -33,14 +33,13 @@ const Container = styled.div`
   min-height: 40vh;
 `
 
-const Leaderboard = ({ data }) => (
+const Leaderboard = ({ data, allOdds }) => (
   <Query query={allPlayers}>
     {({ data: { allPlayers = [] } = {}, ...props}) => {
       const players = allPlayers
         .map(player => ({
           ...player,
-          // balance: getBalance(data, player.bets),
-          finishedBalance: getBalance({ data, bets: player.bets, ignoreUnfinished: true })
+          finishedBalance: getBalance({ data, bets: player.bets, allOdds, ignoreUnfinished: true })
         }))
         .slice(0)
         .sort((a, b) => b.finishedBalance - a.finishedBalance)

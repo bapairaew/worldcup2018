@@ -13,9 +13,8 @@ const Container = styled.div`
   grid-column-gap: ${space.small};
   align-items: center;
   background: ${shadow.light};
-  box-shadow: 0 3px 3px ${shadow.medium};
+  box-shadow: 0 2px 2px ${shadow.light};
   padding: ${space.medium};
-  margin: ${space.medium} 0;
   width: 100%;
 `
 

@@ -30,19 +30,19 @@ const Rule = () => (
       </Card>
       <Card>
         <Text>2.</Text>
-        <Text>Each match can be bet only once and there is no undo once the bet is placed.</Text>
+        <Text>Each match can be bet only once and there is no undo/change once the bet is placed.</Text>
       </Card>
       <Card>
         <Text>3.</Text>
-        <Text>There are only three options for betting - home team wins, away team wins, or draw.</Text>
+        <Text>There are three options for betting - home team wins, away team wins, or draw.</Text>
       </Card>
       <Card>
         <Text>4.</Text>
-        <Text>If your bet is correct, you will be given back odd times the betting amount.</Text>
+        <Text>If your bet is correct, you will be given back the match's odd times of the betting amount.</Text>
       </Card>
       <Card>
         <Text>5.</Text>
-        <Text>If your bet is incorrect, you will only be deducted by the initial betting amount.</Text>
+        <Text>If your bet is incorrect, you will only be deducted by the betting amount.</Text>
       </Card>
     </Container>
   </Page>
