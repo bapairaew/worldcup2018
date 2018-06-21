@@ -82,6 +82,19 @@ Layout.Sidebar.List.Item = styled.span`
   }
 `
 
+Layout.Sidebar.List.Hr = styled.hr`
+  border-color: ${shadow.light};
+`
+
+Layout.Sidebar.List.Elite = styled.div`
+  color: ${color.secondary};
+
+  > * {
+    opacity: 1 !important;
+    cursor: default;
+  }
+`
+
 Layout.Main = styled.div`
   padding: ${space.large};
   height: 100vh;

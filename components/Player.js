@@ -95,7 +95,7 @@ export default ({ rank, image, name, finishedBalance }) => (
     <Avatar src={image || emptyImage} alt={name} />
     <Name>{name}</Name>
     <BalanceContainer>
-      <FinishedBalance>{formatter.format(finishedBalance)}</FinishedBalance>
+      <FinishedBalance>{formatter.format(Math.floor(finishedBalance))}</FinishedBalance>
       {/* <Balance>{formatter.format(balance)}</Balance> */}
     </BalanceContainer>
   </Container>

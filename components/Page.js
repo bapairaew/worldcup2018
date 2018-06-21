@@ -3,7 +3,6 @@ import Layout from 'components/Layout'
 import RuleIcon from 'react-icons/lib/md/assignment'
 import BetsIcon from 'react-icons/lib/md/monetization-on'
 import MatchesIcon from 'react-icons/lib/md/timelapse'
-import ChartsIcon from 'react-icons/lib/md/show-chart'
 import LeaderboardIcon from 'react-icons/lib/md/reorder'
 import EjectIcon from 'react-icons/lib/md/launch'
 import MenuIcon from 'react-icons/lib/md/menu'
@@ -11,7 +10,11 @@ import Avatar from 'components/Avatar'
 import Link from 'next/link'
 import { DataContext } from 'lib/with-data'
 import ReactGA from 'react-ga'
+import ElitePointIcon from 'react-icons/lib/md/stars'
+import EliteIcon from 'react-icons/lib/md/view-module'
+import EliteboardIcon from 'react-icons/lib/md/line-weight'
 
+const formatter = new Intl.NumberFormat()
 class Page extends React.PureComponent {
   state = { menuOpened: false }
 
@@ -30,12 +33,39 @@ class Page extends React.PureComponent {
           <Layout.Sidebar>
             <Layout.Sidebar.Header>
               <DataContext.Consumer>
-                {({ user, balance }) => (
-                  <Avatar name={user && user.name} image={user && user.image} balance={balance} />
+                {({ user = {}, balance }) => (
+                  <Avatar elite={user.elite > 0} name={user.name} image={user.image} balance={balance} />
                 )}
               </DataContext.Consumer>
             </Layout.Sidebar.Header>
             <Layout.Sidebar.List>
+              <Layout.Sidebar.List.Hr />
+              <DataContext.Consumer>
+                {({ user = {}, eliteBalance }) => user.elite > 0 ? (
+                  <React.Fragment>
+                    <Layout.Sidebar.List.Elite>
+                      <Layout.Sidebar.List.Item>
+                        <ElitePointIcon size={24} /> {formatter.format(eliteBalance)}
+                      </Layout.Sidebar.List.Item>
+                    </Layout.Sidebar.List.Elite>
+                    <Link href='/elite'>
+                      <a>
+                        <Layout.Sidebar.List.Item active={page === 'elite'}>
+                          <EliteIcon size={24} /> Elite
+                        </Layout.Sidebar.List.Item>
+                      </a>
+                    </Link>
+                    <Link href='/eliteboard'>
+                      <a>
+                        <Layout.Sidebar.List.Item active={page === 'eliteboard'}>
+                          <EliteboardIcon size={24} /> Eliteboard
+                        </Layout.Sidebar.List.Item>
+                      </a>
+                    </Link>
+                    <Layout.Sidebar.List.Hr />
+                  </React.Fragment>
+                ) : null}
+              </DataContext.Consumer>
               <Link href='/rule'>
                 <a>
                   <Layout.Sidebar.List.Item active={page === 'rule'}>
@@ -64,13 +94,7 @@ class Page extends React.PureComponent {
                   </Layout.Sidebar.List.Item>
                 </a>
               </Link>
-              <Link href='/stats'>
-                <a>
-                  <Layout.Sidebar.List.Item active={page === 'stats'}>
-                    <ChartsIcon size={24} /> Stats
-                  </Layout.Sidebar.List.Item>
-                </a>
-              </Link>
+              <Layout.Sidebar.List.Hr />
             </Layout.Sidebar.List>
             <Layout.Sidebar.List>
               <DataContext.Consumer>

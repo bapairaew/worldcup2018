@@ -1,0 +1,16 @@
+type EliteBetPayload {
+  id: ID!
+  match: Int!
+  team: Int!
+  amount: Int!
+}
+
+extend type Mutation {
+  eliteBet(
+    slackid: String!
+    slacktoken: String!
+    match: Int!
+    team: Int!
+    amount: Int!
+  ): EliteBetPayload
+}

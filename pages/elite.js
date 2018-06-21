@@ -22,35 +22,35 @@ const FORMAT = 'YYYYMMDD'
 
 class Index extends React.PureComponent {
   render () {
-    const { data: { matches = [], teams = [] }, bet, allOdds = [] } = this.props
+    const { data: { matches = [], teams = [] }, eliteBet, allOdds = [] } = this.props
     const date = moment().tz('Europe/Moscow').format(FORMAT)
+    const startedDate = moment('20180622')
     return (
-      <Page page='index'>
+      <Page page='elite'>
         {matches ? (
-          matches[date] ? (
-            <DataContext.Consumer>
-              {({ user: { id: slackid, token: slacktoken, bets = [] } = {}, refetch }) => (
-                <Container>
-                  {matches[date].map(m => (
+          <DataContext.Consumer>
+            {({ user: { id: slackid, token: slacktoken, eliteBets = [], elite } = {}, refetch }) => elite > 0 ? (
+              <Container>
+                {Object.keys(matches)
+                  .reduce((all, d) => all.concat(matches[d]), [])
+                  .filter(m => moment(m.date).isAfter(startedDate))
+                  .map(m => (
                     <Bet
                       key={m.name}
                       {...m}
-                      bets={bets.filter(b => b.match === m.name)}
+                      bets={eliteBets.filter(b => b.match === m.name)}
                       home_team={teams[m.home_team - 1]}
                       away_team={teams[m.away_team - 1]}
                       odd={getOdd(m, allOdds)}
                       onBet={async (props) => {
-                        const response = await bet({ slackid, slacktoken, match: m.name, team: props.team.id, amount: +props.value })
+                        const response = await eliteBet({ slackid, slacktoken, match: m.name, team: props.team.id, amount: +props.value })
                         await refetch()
                         return response
                       }} />
                   ))}
-                </Container>
-              )}
-            </DataContext.Consumer>
-          ) : (
-            <Text dusha tag='h1' size={3}>{process.browser && 'No Match'}</Text>
-          )
+              </Container>
+            ) : <Text dusha tag='h1' size={3}>Elite only</Text>}
+          </DataContext.Consumer>
         ) : (
           <Container>
             {[0, 1, 2].map(m => (
@@ -64,14 +64,14 @@ class Index extends React.PureComponent {
 }
 
 export default graphql(gql`
-  mutation bet (
+  mutation eliteBet (
     $slackid: String!
     $slacktoken: String!
     $match: Int!
     $team: Int!
     $amount: Int!
   ) {
-    bet(
+    eliteBet(
       slackid: $slackid
       slacktoken: $slacktoken
       match: $match
@@ -86,6 +86,6 @@ export default graphql(gql`
   }
 `, {
   props: ({ mutate }) => ({
-    bet: ({ slackid, slacktoken, match, team, amount }) => mutate({ variables: { slackid, slacktoken, match, team, amount } })
+    eliteBet: ({ slackid, slacktoken, match, team, amount }) => mutate({ variables: { slackid, slacktoken, match, team, amount } })
   })
 })(withData(Index))

@@ -23,7 +23,7 @@ const AvatarImage = styled.img`
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  box-shadow: 2px 2px 5px ${shadow.light};
+  box-shadow: 0 0 0 6px ${props => props.elite ? color.secondary : color.primary};
 ` 
 
 const AvatarImagePlaceholder = AvatarImage.withComponent('div').extend`
@@ -38,7 +38,7 @@ const AvatarText = styled(Text)`
 
 const BalanceText = styled(Text)`
   text-align: center;
-  margin: ${space.small} 0 ${space.small} 0 !important;
+  margin: ${space.small} 0 0 !important;
   color: ${color.secondary};
   display: grid;
   grid-template-columns: 15px auto;
@@ -47,11 +47,11 @@ const BalanceText = styled(Text)`
 
 export default class Avatar extends React.PureComponent {
   render () {
-    const { name, image, balance } = this.props
+    const { elite, name, image, balance } = this.props
     return (
       <Container>
         <LogoImage alt='World Cup 2018' src='https://ucarecdn.com/827fb52e-39e6-44e3-af72-3131d139e6bb/-/crop/154x45/0,110/-/format/png/' />
-        {image ? <AvatarImage alt={name} src={image} /> : <AvatarImagePlaceholder />}
+        {image ? <AvatarImage elite={elite} alt={name} src={image} /> : <AvatarImagePlaceholder />}
         <AvatarText tag='h1' size={font.medium}>{name}</AvatarText>
         <BalanceText size={font.small}><BalanceIcon />{formatter.format(balance)}</BalanceText>
       </Container>

@@ -41,7 +41,7 @@ const Flag = styled.img`
   height: 60px;
   border-radius: 50%;
   object-fit: cover;
-  box-shadow: 0 0 0 6px ${props => props.won ? color.green : color.primary};
+  box-shadow: 0 0 0 6px ${props => props.won ? color.secondary : color.primary};
   margin: ${space.medium};
 `
 
@@ -148,7 +148,12 @@ const BetInput = styled.input`
 const BetContent = styled.div`
   width: 100%;
   height: 100%;
-  background: ${props => props.correct ? color.secondary : (props.bet && !props.finished) ? shadow.medium : shadow.light};
+  background: ${props =>
+    props.correct
+      ? color.secondary
+        : props.started
+          ? shadow.light
+          : shadow.medium};
   color: ${props => props.finished ? color.primary : '#fff'};
   display: grid;
   justify-content: center;
@@ -157,11 +162,15 @@ const BetContent = styled.div`
   font-weight: bold;
 `
 
+const AddButtonWrapper = styled.div`
+  position: relative;
+  height: 40px;
+`
+
 class Better extends React.PureComponent {
   state = {
     clicked: false,
     submitting: false,
-    submitted: false,
     value: ''
   }
 
@@ -171,7 +180,7 @@ class Better extends React.PureComponent {
       e.preventDefault()
       this.setState({ submitting: true })
       const response = await onBet({ ...props, value: this.state.value })
-      this.setState({ submitted: true })
+      this.setState({ submitted: true, value: '', clicked: false })
     } catch (ex) {
       toast.error(ex.message)
     } finally {
@@ -180,20 +189,45 @@ class Better extends React.PureComponent {
   }
 
   render () {
-    const { betting, started, finished, won, team = {}, bet = {} } = this.props
+    const { started, finished, won, team = {}, bets = [] } = this.props
     const { clicked, value, submitting, submitted } = this.state
     const active = value !== '' || clicked
+    const bet = bets[0] || {}
     const correct = finished && bet.team === team.id && won
+    const amount = bets.reduce((a, b) => a + b.amount, 0)
     return (
       <BetContainer role='button' started={started}>
-        {betting ? (
+        {submitting ? (
           <BetContent>
             <ReactLoading type='bubbles' height={30} width={30} />
           </BetContent>
-        ) : (bet.id || started || submitting || submitted) ? (
-          <BetContent bet={bet.team === team.id} finished={finished} correct={correct}>
-            {bet.team === team.id && bet.amount && formatter.format(bet.amount)}
+        ) : started ? (
+          <BetContent started={started} finished={finished} correct={correct}>
+            {amount ? formatter.format(amount) : ' '}
           </BetContent>
+        ) : bet.id ? (
+          <React.Fragment>
+            <BetContent started>
+              {amount ? formatter.format(amount) : ' '}
+            </BetContent>
+            <AddButtonWrapper>
+              <BetButton
+                active={active}
+                onClick={() => this.setState({ clicked: true }, () => this.input.focus())}>
+                Add
+              </BetButton>
+              <BetForm active={active} onSubmit={this.handleSubmit}>
+                <BetInput
+                  innerRef={e => { this.input = e }}
+                  type='text'
+                  disabled={submitting}
+                  onBlur={() => this.setState({ clicked: false })}
+                  onChange={e => this.setState({ value: e.target.value })}
+                  value={value ? value : ''} />
+                <BetSubmit disabled={submitting}><CheckedIcon size={20} /></BetSubmit>
+              </BetForm>
+            </AddButtonWrapper>
+          </React.Fragment>
         ) : (
           <React.Fragment>
             <BetButton
@@ -230,19 +264,15 @@ class Bet extends React.PureComponent {
 
   handleBet = async (props) => {
     try {
-      this.setState({ betting: true })
       const response = await this.props.onBet(props)
       return response
     } catch (ex) {
       throw ex
-    } finally {
-      this.setState({ betting: false })
     }
   }
 
   render () {
-    const { bet = {}, odd = {}, date: _date = '2016-01-01', finished = true, name, home_team, away_team, home_result, away_result, onBet } = this.props
-    const { betting } = this.state
+    const { bets = [], odd = {}, date: _date = '2016-01-01', finished = true, name, home_team, away_team, home_result, away_result, onBet } = this.props
     const date = moment(_date)
     const now = moment()
     const started = date.isBefore(now)
@@ -255,9 +285,9 @@ class Bet extends React.PureComponent {
         <Odd><span>{odd.home}x</span></Odd>
         <Odd><span>{odd.draw}x</span></Odd>
         <Odd><span>{odd.away}x</span></Odd>
-        <Better betting={betting} bet={bet} started={started} finished={finished} team={home_team} onBet={this.handleBet} won={home_result > away_result} />
-        <Better betting={betting} bet={bet} started={started} finished={finished} team={{ id: -1 }} onBet={this.handleBet} won={home_result === away_result} />
-        <Better betting={betting} bet={bet} started={started} finished={finished} team={away_team} onBet={this.handleBet} won={away_result > home_result} />
+        <Better bets={bets.filter(b => b.team === home_team.id)} started={started} finished={finished} team={home_team} onBet={this.handleBet} won={home_result > away_result} />
+        <Better bets={bets.filter(b => b.team === -1)} started={started} finished={finished} team={{ id: -1 }} onBet={this.handleBet} won={home_result === away_result} />
+        <Better bets={bets.filter(b => b.team === away_team.id)} started={started} finished={finished} team={away_team} onBet={this.handleBet} won={away_result > home_result} />
       </Container>
     )
   }
