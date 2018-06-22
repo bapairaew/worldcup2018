@@ -44,7 +44,7 @@ class Matches extends React.PureComponent {
           </React.Fragment>
         ) : (
           <DataContext.Consumer>
-            {({ user: { id: slackid, token: slacktoken, bets = [] } = {} }) => (
+            {({ user: { id: slackid, token: slacktoken, bets = [] } = {}, allOdds }) => (
               Object.keys(matches || {}).map(d => (
                 <React.Fragment key={d}>
                   <Header tag='h2' size={1.5}>{moment(matches[d][0].date).tz('Europe/Moscow').calendar(null, calendarFormat)}</Header>
@@ -53,7 +53,8 @@ class Matches extends React.PureComponent {
                       <Match
                         key={m.name}
                         {...m}
-                        bet={bets.find(b => b.match === m.name)}
+                        bets={bets.filter(b => b.match === m.name)}
+                        allOdds={allOdds}
                         home_team={teams[m.home_team - 1]}
                         away_team={teams[m.away_team - 1]} /> 
                     ))}

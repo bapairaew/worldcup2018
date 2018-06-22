@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import Text from 'components/Text'
 import { color, space, shadow, font, radius, breakpoint } from 'styles'
-import { correctBet } from 'lib/god'
+import { correctBet, getOdd } from 'lib/god'
 
 const formatter = new Intl.NumberFormat()
 const getColor = props => props.correct ? color.secondary : props.wrong ? color.red : shadow.light
@@ -110,12 +110,12 @@ const Amount = styled.div`
     }
   ` : `
     left: 50%;
-    margin-left: -65px;
+    margin-left: -55px;
     @media (max-width: ${breakpoint}px) {
-      margin-left: -50px;
+      margin-left: -40px;
     }
   `};
-  width: 100px;
+  width: 80px;
   background: ${props=> getColor(props)};
   display: grid;
   align-items: center;
@@ -124,15 +124,34 @@ const Amount = styled.div`
   border-radius: ${radius.medium} ${radius.medium} 0 0;
 `
 
-export default ({ bet = {}, finished, home_team = {}, away_team = {}, home_result = null, away_result = null, winner = null }) => {
-  const match = { home_team, away_team, home_result, away_result, winner }
+const getResults = (_, team, match, finished, odds, type) => {
+  const bets = _.filter(b => b.team === team.id)
+  const bet = bets[0] || {}
   const correct = finished && correctBet(bet, match)
   const wrong = bet.id && finished && !correct
-  const position = bet.team === home_team.id ? 'left' : bet.team === away_team.id ? 'right' : 'middle'
+  const odd = getOdd(match, odds)[type]
+  const amount = bets.reduce((sum, b) => sum + b.amount, 0)
+  return {
+    correct,
+    wrong,
+    amount,
+    adjustedAmount: correct ? odd * amount : amount
+  }
+}
+
+export default ({ bets = [], allOdds, finished, name, home_team = {}, away_team = {}, home_result = null, away_result = null, winner = null }) => {
+  const match = { name, home_team, away_team, home_result, away_result, winner }
+  const home = getResults(bets, home_team, match, finished, allOdds, 'home')
+  const draw = getResults(bets, { id: -1 }, match, finished, allOdds, 'draw')
+  const away = getResults(bets, away_team, match, finished, allOdds, 'away')
+  const winning = [home, draw, away].reduce((sum, g) => (g.correct ? g.adjustedAmount : 0) + sum, 0)
+  const losing = [home, draw, away].reduce((sum, g) => (!g.correct ? g.adjustedAmount : 0) + sum, 0)
   return (
     <Wrapper>
-      {bet.id && <Amount position={position} correct={correct} wrong={wrong}>{formatter.format(bet.amount)}</Amount>}
-      <Container correct={correct} wrong={wrong}>
+      {home.amount ? <Amount position='left' {...home}>{!finished ? home.amount : formatter.format(home.adjustedAmount)}</Amount> : null}
+      {draw.amount ? <Amount position='center' {...draw}>{!finished ? draw.amount : formatter.format(draw.adjustedAmount)}</Amount> : null}
+      {away.amount ? <Amount position='right' {...away}>{!finished ? away.amount : formatter.format(away.adjustedAmount)}</Amount> : null}
+      <Container correct={finished && winning > losing} wrong={finished && winning < losing}>
         <FlagContainer left>
           {home_team.flag ? <Flag src={home_team.flag} alt={home_team.name} /> : <Placeholder />}
         </FlagContainer>

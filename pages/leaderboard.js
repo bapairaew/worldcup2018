@@ -14,6 +14,7 @@ const allPlayers = gql`
       id
       name
       image
+      elite
       bets {
         id
         match
