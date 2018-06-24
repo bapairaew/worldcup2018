@@ -19,6 +19,8 @@ const findMatch = (data, match) => findMatchFromGroup(data.groups, match) || fin
 module.exports = async (event) => {
   try {
     const { slackid, slacktoken, match, team, amount } = event.data
+    if (amount < 0) { return { error: 'Negative value is not allowed' } }
+    
     const graphcool = fromEvent(event)
     const api = graphcool.api('simple/v1')
     
